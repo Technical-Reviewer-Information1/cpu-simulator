@@ -71,12 +71,12 @@ def create_memory_visualization():
         header=dict(values=['番地', '内容', 'タイプ'],
                    fill_color='lightblue',
                    align='center',
-                   font=dict(size=14, color='white')),
+                   font=dict(size=14, color='black')),
         cells=dict(values=[df['番地'], df['内容'], df['タイプ']],
                   fill_color=[['lightgray' if addr == st.session_state.cpu_state['pc'] and addr <= 4 else 'white' 
                               for addr in df['番地']]],
                   align='center',
-                  font=dict(size=12))
+                  font=dict(size=12, color='black'))
     )])
     
     fig.update_layout(
@@ -108,7 +108,7 @@ def create_cpu_visualization():
         x=0.5, y=0.5,
         text=registers_text,
         showarrow=False,
-        font=dict(size=16),
+        font=dict(size=16, color='black'),
         bgcolor="lightcyan",
         bordercolor="blue",
         borderwidth=2,
@@ -266,11 +266,11 @@ if st.session_state.cpu_state['is_finished']:
         header=dict(values=['項目', '値'],
                    fill_color='lightgreen',
                    align='center',
-                   font=dict(size=14, color='white')),
+                   font=dict(size=14, color='black')),
         cells=dict(values=[result_df['項目'], result_df['値']],
                   fill_color='lightcyan',
                   align='center',
-                  font=dict(size=12))
+                  font=dict(size=12, color='black'))
     )])
     
     fig_result.update_layout(
