@@ -268,7 +268,9 @@ def create_unified_cpu_visualization():
         yaxis=dict(visible=False, range=[0, 1]),
         height=600,
         margin=dict(l=10, r=10, t=50, b=10),
-        showlegend=False
+        showlegend=False,
+        plot_bgcolor='white',
+        paper_bgcolor='white'
     )
 
     return fig
