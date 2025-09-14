@@ -110,7 +110,7 @@ def create_unified_cpu_visualization():
             line=dict(color="black", width=1)
         )
 
-        # アドレスと内容の表示
+        # アドレスと内容の表示（枠の中央に配置）
         content_type = "命令" if addr <= 4 else "データ"
         fig.add_annotation(
             x=0.2, y=y_pos,
@@ -118,7 +118,9 @@ def create_unified_cpu_visualization():
             showarrow=False,
             font=dict(size=14, color='black'),
             xref="paper", yref="paper",
-            align="center"
+            align="center",
+            xanchor="center",
+            yanchor="middle"
         )
 
     # CPUレジスタの描画（右側）
@@ -135,7 +137,9 @@ def create_unified_cpu_visualization():
         showarrow=False,
         font=dict(size=16, color='black'),
         xref="paper", yref="paper",
-        align="center"
+        align="center",
+        xanchor="center",
+        yanchor="middle"
     )
 
     # 命令レジスタ
@@ -151,7 +155,9 @@ def create_unified_cpu_visualization():
         showarrow=False,
         font=dict(size=14, color='black'),
         xref="paper", yref="paper",
-        align="center"
+        align="center",
+        xanchor="center",
+        yanchor="middle"
     )
 
     # データレジスタA
@@ -167,7 +173,9 @@ def create_unified_cpu_visualization():
         showarrow=False,
         font=dict(size=15, color='black'),
         xref="paper", yref="paper",
-        align="center"
+        align="center",
+        xanchor="center",
+        yanchor="middle"
     )
 
     # データレジスタB
@@ -183,7 +191,9 @@ def create_unified_cpu_visualization():
         showarrow=False,
         font=dict(size=15, color='black'),
         xref="paper", yref="paper",
-        align="center"
+        align="center",
+        xanchor="center",
+        yanchor="middle"
     )
 
     # データフローの矢印を追加
