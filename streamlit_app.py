@@ -208,13 +208,14 @@ def create_unified_cpu_visualization():
             line=dict(color="blue", width=8),
             layer="above"
         )
-        # 矢印の先端（線の方向に合わせて回転）
+        # 矢印の先端（線の終点に正確に配置）
         fig.add_annotation(
             x=0.65, y=0.7,
-            text="◀",  # 左向きの矢印
+            text="▶",  # 右向きの矢印
             showarrow=False,
             font=dict(size=20, color='blue'),
-            xref="paper", yref="paper"
+            xref="paper", yref="paper",
+            xanchor="center", yanchor="middle"
         )
         # ラベル
         fig.add_annotation(
@@ -243,10 +244,11 @@ def create_unified_cpu_visualization():
             # 矢印の先端
             fig.add_annotation(
                 x=0.65, y=0.5,
-                text="◀",  # 左向きの矢印
+                text="▶",  # 右向きの矢印
                 showarrow=False,
                 font=dict(size=20, color='orange'),
-                xref="paper", yref="paper"
+                xref="paper", yref="paper",
+                xanchor="center", yanchor="middle"
             )
             # ラベル
             fig.add_annotation(
@@ -271,10 +273,11 @@ def create_unified_cpu_visualization():
             # 矢印の先端
             fig.add_annotation(
                 x=0.8, y=0.5,
-                text="◀",  # 左向きの矢印
+                text="▶",  # 右向きの矢印
                 showarrow=False,
                 font=dict(size=20, color='red'),
-                xref="paper", yref="paper"
+                xref="paper", yref="paper",
+                xanchor="center", yanchor="middle"
             )
             # ラベル
             fig.add_annotation(
@@ -301,10 +304,11 @@ def create_unified_cpu_visualization():
         # 矢印の先端
         fig.add_annotation(
             x=0.725, y=0.45,
-            text="◀",  # 左向きの矢印
+            text="◀",  # 左向きの矢印（BからAへ）
             showarrow=False,
             font=dict(size=20, color='green'),
-            xref="paper", yref="paper"
+            xref="paper", yref="paper",
+            xanchor="center", yanchor="middle"
         )
         # ラベル
         fig.add_annotation(
@@ -328,13 +332,14 @@ def create_unified_cpu_visualization():
             line=dict(color="purple", width=8),
             layer="above"
         )
-        # 矢印の先端（下向きの矢印）
+        # 矢印の先端
         fig.add_annotation(
             x=0.35, y=0.05,
-            text="▼",  # 下向きの矢印
+            text="▶",  # 右向きの矢印（統一）
             showarrow=False,
             font=dict(size=20, color='purple'),
-            xref="paper", yref="paper"
+            xref="paper", yref="paper",
+            xanchor="center", yanchor="middle"
         )
         # ラベル
         fig.add_annotation(
