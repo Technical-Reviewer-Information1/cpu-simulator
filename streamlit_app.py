@@ -203,16 +203,16 @@ def create_unified_cpu_visualization():
         fig.add_annotation(
             x=0.35, y=pc_y,
             ax=0.65, ay=0.7,
-            arrowhead=3,
-            arrowsize=1.5,
-            arrowwidth=3,
+            arrowhead=2,
+            arrowsize=3,
+            arrowwidth=8,
             arrowcolor="blue",
             text="命令フェッチ",
             font=dict(size=12, color='blue', family='Arial Black'),
             textangle=0,
-            bgcolor="white",
+            bgcolor="lightblue",
             bordercolor="blue",
-            borderwidth=1
+            borderwidth=2
         )
 
     # データ読み込み矢印（READ命令時）
@@ -222,29 +222,29 @@ def create_unified_cpu_visualization():
             fig.add_annotation(
                 x=0.35, y=0.25,  # 番地10
                 ax=0.65, ay=0.5,  # レジスタA
-                arrowhead=3,
-                arrowsize=1.5,
-                arrowwidth=3,
+                arrowhead=2,
+                arrowsize=3,
+                arrowwidth=8,
                 arrowcolor="orange",
                 text="データ読み込み",
                 font=dict(size=11, color='orange', family='Arial Black'),
-                bgcolor="white",
+                bgcolor="lightyellow",
                 bordercolor="orange",
-                borderwidth=1
+                borderwidth=2
             )
         elif 'B' in st.session_state.cpu_state['ir']:
             fig.add_annotation(
                 x=0.35, y=0.15,  # 番地11
                 ax=0.8, ay=0.5,   # レジスタB
-                arrowhead=3,
-                arrowsize=1.5,
-                arrowwidth=3,
+                arrowhead=2,
+                arrowsize=3,
+                arrowwidth=8,
                 arrowcolor="red",
                 text="データ読み込み",
                 font=dict(size=11, color='red', family='Arial Black'),
-                bgcolor="white",
+                bgcolor="lightpink",
                 bordercolor="red",
-                borderwidth=1
+                borderwidth=2
             )
 
     # ADD命令時のレジスタ間8の矢印
@@ -253,15 +253,15 @@ def create_unified_cpu_visualization():
         fig.add_annotation(
             x=0.8, y=0.45,  # レジスタBの下
             ax=0.725, ay=0.45,  # レジスタAへ
-            arrowhead=3,
-            arrowsize=1.5,
-            arrowwidth=3,
+            arrowhead=2,
+            arrowsize=3,
+            arrowwidth=8,
             arrowcolor="green",
             text="加算",
             font=dict(size=11, color='green', family='Arial Black'),
-            bgcolor="white",
+            bgcolor="lightgreen",
             bordercolor="green",
-            borderwidth=1
+            borderwidth=2
         )
 
     # 書き込み矢印（WRITE命令時）
@@ -269,15 +269,15 @@ def create_unified_cpu_visualization():
         fig.add_annotation(
             x=0.725, y=0.45,  # レジスタA
             ax=0.35, ay=0.05,  # 番地12
-            arrowhead=3,
-            arrowsize=1.5,
-            arrowwidth=3,
+            arrowhead=2,
+            arrowsize=3,
+            arrowwidth=8,
             arrowcolor="purple",
             text="結果書き込み",
             font=dict(size=11, color='purple', family='Arial Black'),
-            bgcolor="white",
+            bgcolor="lavender",
             bordercolor="purple",
-            borderwidth=1
+            borderwidth=2
         )
 
     # プログラムカウンタの更新矢印（次の命令へ）
