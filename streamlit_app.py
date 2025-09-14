@@ -88,42 +88,189 @@ def create_memory_visualization():
     
     return fig
 
-def create_cpu_visualization():
+def create_unified_cpu_visualization():
     fig = go.Figure()
-    
-    # CPU内部のレジスタを可視化
-    registers_text = f"""
-    <b>🔢 プログラムカウンタ (PC)</b><br>
-    現在の値: {st.session_state.cpu_state['pc']}<br><br>
-    
-    <b>📋 命令レジスタ (IR)</b><br>
-    現在の命令: {st.session_state.cpu_state['ir']}<br><br>
-    
-    <b>💾 データレジスタ</b><br>
-    レジスタA: {st.session_state.cpu_state['registers']['A']}<br>
-    レジスタB: {st.session_state.cpu_state['registers']['B']}
-    """
-    
+
+    # メモリテーブルの描画（左側）
+    memory_y_positions = [0.85, 0.75, 0.65, 0.55, 0.45, 0.25, 0.15, 0.05]
+
+    for i, (addr, content) in enumerate(sorted(st.session_state.cpu_state['memory'].items())):
+        y_pos = memory_y_positions[i] if i < len(memory_y_positions) else 0.05
+
+        # 現在のPC位置をハイライト
+        bg_color = "yellow" if addr == st.session_state.cpu_state['pc'] and addr <= 4 else "lightgray"
+
+        # メモリセルの描画
+        fig.add_shape(
+            type="rect",
+            x0=0.05, y0=y_pos-0.03, x1=0.35, y1=y_pos+0.03,
+            fillcolor=bg_color,
+            line=dict(color="black", width=1)
+        )
+
+        # アドレスと内容の表示
+        content_type = "命令" if addr <= 4 else "データ"
+        fig.add_annotation(
+            x=0.2, y=y_pos,
+            text=f"<b>{addr}</b>: {content} ({content_type})",
+            showarrow=False,
+            font=dict(size=10, color='black'),
+            xref="paper", yref="paper"
+        )
+
+    # CPUレジスタの描画（右側）
+    # プログラムカウンタ
+    fig.add_shape(
+        type="rect",
+        x0=0.65, y0=0.8, x1=0.95, y1=0.9,
+        fillcolor="lightblue",
+        line=dict(color="blue", width=2)
+    )
     fig.add_annotation(
-        x=0.5, y=0.5,
-        text=registers_text,
+        x=0.8, y=0.85,
+        text=f"<b>PC: {st.session_state.cpu_state['pc']}</b>",
         showarrow=False,
-        font=dict(size=16, color='black'),
-        bgcolor="lightcyan",
-        bordercolor="blue",
-        borderwidth=2,
+        font=dict(size=12, color='black'),
         xref="paper", yref="paper"
     )
-    
-    fig.update_layout(
-        title="🖥️ CPU内部状態",
-        title_x=0.5,
-        xaxis=dict(visible=False),
-        yaxis=dict(visible=False),
-        height=300,
-        margin=dict(l=0, r=0, t=50, b=0)
+
+    # 命令レジスタ
+    fig.add_shape(
+        type="rect",
+        x0=0.65, y0=0.65, x1=0.95, y1=0.75,
+        fillcolor="lightgreen",
+        line=dict(color="green", width=2)
     )
-    
+    fig.add_annotation(
+        x=0.8, y=0.7,
+        text=f"<b>IR:</b> {st.session_state.cpu_state['ir']}",
+        showarrow=False,
+        font=dict(size=10, color='black'),
+        xref="paper", yref="paper"
+    )
+
+    # データレジスタA
+    fig.add_shape(
+        type="rect",
+        x0=0.65, y0=0.45, x1=0.8, y1=0.55,
+        fillcolor="lightyellow",
+        line=dict(color="orange", width=2)
+    )
+    fig.add_annotation(
+        x=0.725, y=0.5,
+        text=f"<b>A: {st.session_state.cpu_state['registers']['A']}</b>",
+        showarrow=False,
+        font=dict(size=11, color='black'),
+        xref="paper", yref="paper"
+    )
+
+    # データレジスタB
+    fig.add_shape(
+        type="rect",
+        x0=0.8, y0=0.45, x1=0.95, y1=0.55,
+        fillcolor="lightcoral",
+        line=dict(color="red", width=2)
+    )
+    fig.add_annotation(
+        x=0.875, y=0.5,
+        text=f"<b>B: {st.session_state.cpu_state['registers']['B']}</b>",
+        showarrow=False,
+        font=dict(size=11, color='black'),
+        xref="paper", yref="paper"
+    )
+
+    # データフローの矢印を追加
+    # メモリからCPUへの命令フェッチ矢印
+    if st.session_state.cpu_state['pc'] <= 4:
+        pc_y = memory_y_positions[st.session_state.cpu_state['pc']]
+        fig.add_annotation(
+            x=0.35, y=pc_y,
+            ax=0.65, ay=0.7,
+            arrowhead=2,
+            arrowsize=1,
+            arrowwidth=2,
+            arrowcolor="blue",
+            text="命令フェッチ",
+            font=dict(size=9, color='blue'),
+            textangle=0
+        )
+
+    # データ読み込み矢印（READ命令時）
+    if st.session_state.cpu_state['ir'].startswith('READ'):
+        # 番地10または11からレジスタへの矢印
+        if 'A' in st.session_state.cpu_state['ir']:
+            fig.add_annotation(
+                x=0.35, y=0.25,  # 番地10
+                ax=0.65, ay=0.5,  # レジスタA
+                arrowhead=2,
+                arrowsize=1,
+                arrowwidth=2,
+                arrowcolor="orange",
+                text="データ読み込み",
+                font=dict(size=8, color='orange')
+            )
+        elif 'B' in st.session_state.cpu_state['ir']:
+            fig.add_annotation(
+                x=0.35, y=0.15,  # 番地11
+                ax=0.8, ay=0.5,   # レジスタB
+                arrowhead=2,
+                arrowsize=1,
+                arrowwidth=2,
+                arrowcolor="red",
+                text="データ読み込み",
+                font=dict(size=8, color='red')
+            )
+
+    # 書き込み矢印（WRITE命令時）
+    if st.session_state.cpu_state['ir'].startswith('WRITE'):
+        fig.add_annotation(
+            x=0.725, y=0.45,  # レジスタA
+            ax=0.35, ay=0.05,  # 番地12
+            arrowhead=2,
+            arrowsize=1,
+            arrowwidth=2,
+            arrowcolor="purple",
+            text="結果書き込み",
+            font=dict(size=8, color='purple')
+        )
+
+    # タイトルとラベル
+    fig.add_annotation(
+        x=0.2, y=0.98,
+        text="<b>🧠 主記憶装置</b>",
+        showarrow=False,
+        font=dict(size=14, color='black'),
+        xref="paper", yref="paper"
+    )
+
+    fig.add_annotation(
+        x=0.8, y=0.98,
+        text="<b>🖥️ CPU</b>",
+        showarrow=False,
+        font=dict(size=14, color='black'),
+        xref="paper", yref="paper"
+    )
+
+    # 実行ステップ表示
+    if st.session_state.cpu_state['current_step'] > 0:
+        fig.add_annotation(
+            x=0.5, y=0.02,
+            text=f"<b>実行ステップ: {st.session_state.cpu_state['current_step']}</b>",
+            showarrow=False,
+            font=dict(size=12, color='darkblue'),
+            xref="paper", yref="paper"
+        )
+
+    fig.update_layout(
+        title="💻 CPUと主記憶装置の動作シミュレーション",
+        title_x=0.5,
+        xaxis=dict(visible=False, range=[0, 1]),
+        yaxis=dict(visible=False, range=[0, 1]),
+        height=600,
+        margin=dict(l=10, r=10, t=50, b=10),
+        showlegend=False
+    )
+
     return fig
 
 def execute_instruction():
@@ -183,18 +330,12 @@ st.code(program_code, language='text')
 
 st.markdown("---")
 
-# CPUの状態可視化
-col1, col2 = st.columns(2)
-
-with col1:
-    st.plotly_chart(create_memory_visualization(), use_container_width=True)
-
-with col2:
-    st.plotly_chart(create_cpu_visualization(), use_container_width=True)
+# CPUと主記憶装置の統合可視化
+st.plotly_chart(create_unified_cpu_visualization(), use_container_width=True)
 
 # 実行制御ボタン
 st.markdown("---")
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns([1, 1])
 
 with col1:
     if st.button("▶️ 1ステップ実行", disabled=st.session_state.cpu_state['is_finished']):
@@ -203,22 +344,6 @@ with col1:
 with col2:
     if st.button("🔄 リセット"):
         reset_cpu()
-
-with col3:
-    auto_run = st.button("⚡ 自動実行", disabled=st.session_state.cpu_state['is_finished'])
-
-# 自動実行処理
-if auto_run:
-    placeholder = st.empty()
-    while not st.session_state.cpu_state['is_finished']:
-        execute_instruction()
-        with placeholder.container():
-            col1, col2 = st.columns(2)
-            with col1:
-                st.plotly_chart(create_memory_visualization(), use_container_width=True)
-            with col2:
-                st.plotly_chart(create_cpu_visualization(), use_container_width=True)
-        time.sleep(1)
 
 # 実行ログ表示
 if st.session_state.cpu_state['execution_log']:
