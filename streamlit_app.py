@@ -5,12 +5,12 @@ import pandas as pd
 import time
 
 st.set_page_config(
-    page_title="CPU計算の仕組み - 可視化学習アプリ",
+    page_title="CPUにおける計算の仕組み",
     page_icon="💻",
     layout="wide"
 )
 
-st.title("💻 CPUにおける計算の仕組み")
+st.title("CPUにおける計算の仕組み（pp.178-180）")
 st.caption("Created by Dit-Lab.(Daiki ITO)")
 st.caption("Supported by Tomoaki ATSUMI")
 
