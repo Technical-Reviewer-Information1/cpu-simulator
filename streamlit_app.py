@@ -19,7 +19,7 @@ if 'cpu_state' not in st.session_state:
     st.session_state.cpu_state = {
         'memory': {
             0: 'READ A, (10)',
-            1: 'READ B, (11)', 
+            1: 'READ B, (11)',
             2: 'ADD A, B',
             3: 'WRITE (12), A',
             4: 'STOP',
@@ -32,6 +32,7 @@ if 'cpu_state' not in st.session_state:
         'registers': {'A': 0, 'B': 0},  # データレジスタ
         'current_step': 0,
         'execution_log': [],
+        'state_history': [],  # 状態履歴を保存
         'is_running': False,
         'is_finished': False
     }
@@ -40,7 +41,7 @@ def reset_cpu():
     st.session_state.cpu_state = {
         'memory': {
             0: 'READ A, (10)',
-            1: 'READ B, (11)', 
+            1: 'READ B, (11)',
             2: 'ADD A, B',
             3: 'WRITE (12), A',
             4: 'STOP',
@@ -53,6 +54,7 @@ def reset_cpu():
         'registers': {'A': 0, 'B': 0},
         'current_step': 0,
         'execution_log': [],
+        'state_history': [],
         'is_running': False,
         'is_finished': False
     }
@@ -114,7 +116,7 @@ def create_unified_cpu_visualization():
             x=0.2, y=y_pos,
             text=f"<b>{addr}</b>: {content} ({content_type})",
             showarrow=False,
-            font=dict(size=10, color='black'),
+            font=dict(size=12, color='black'),
             xref="paper", yref="paper"
         )
 
@@ -130,7 +132,7 @@ def create_unified_cpu_visualization():
         x=0.8, y=0.85,
         text=f"<b>PC: {st.session_state.cpu_state['pc']}</b>",
         showarrow=False,
-        font=dict(size=12, color='black'),
+        font=dict(size=14, color='black'),
         xref="paper", yref="paper"
     )
 
@@ -145,7 +147,7 @@ def create_unified_cpu_visualization():
         x=0.8, y=0.7,
         text=f"<b>IR:</b> {st.session_state.cpu_state['ir']}",
         showarrow=False,
-        font=dict(size=10, color='black'),
+        font=dict(size=12, color='black'),
         xref="paper", yref="paper"
     )
 
@@ -160,7 +162,7 @@ def create_unified_cpu_visualization():
         x=0.725, y=0.5,
         text=f"<b>A: {st.session_state.cpu_state['registers']['A']}</b>",
         showarrow=False,
-        font=dict(size=11, color='black'),
+        font=dict(size=13, color='black'),
         xref="paper", yref="paper"
     )
 
@@ -175,7 +177,7 @@ def create_unified_cpu_visualization():
         x=0.875, y=0.5,
         text=f"<b>B: {st.session_state.cpu_state['registers']['B']}</b>",
         showarrow=False,
-        font=dict(size=11, color='black'),
+        font=dict(size=13, color='black'),
         xref="paper", yref="paper"
     )
 
@@ -186,13 +188,16 @@ def create_unified_cpu_visualization():
         fig.add_annotation(
             x=0.35, y=pc_y,
             ax=0.65, ay=0.7,
-            arrowhead=2,
-            arrowsize=1,
-            arrowwidth=2,
+            arrowhead=3,
+            arrowsize=1.5,
+            arrowwidth=3,
             arrowcolor="blue",
             text="命令フェッチ",
-            font=dict(size=9, color='blue'),
-            textangle=0
+            font=dict(size=11, color='blue', family='Arial Black'),
+            textangle=0,
+            bgcolor="white",
+            bordercolor="blue",
+            borderwidth=1
         )
 
     # データ読み込み矢印（READ命令時）
@@ -202,44 +207,91 @@ def create_unified_cpu_visualization():
             fig.add_annotation(
                 x=0.35, y=0.25,  # 番地10
                 ax=0.65, ay=0.5,  # レジスタA
-                arrowhead=2,
-                arrowsize=1,
-                arrowwidth=2,
+                arrowhead=3,
+                arrowsize=1.5,
+                arrowwidth=3,
                 arrowcolor="orange",
                 text="データ読み込み",
-                font=dict(size=8, color='orange')
+                font=dict(size=10, color='orange', family='Arial Black'),
+                bgcolor="white",
+                bordercolor="orange",
+                borderwidth=1
             )
         elif 'B' in st.session_state.cpu_state['ir']:
             fig.add_annotation(
                 x=0.35, y=0.15,  # 番地11
                 ax=0.8, ay=0.5,   # レジスタB
-                arrowhead=2,
-                arrowsize=1,
-                arrowwidth=2,
+                arrowhead=3,
+                arrowsize=1.5,
+                arrowwidth=3,
                 arrowcolor="red",
                 text="データ読み込み",
-                font=dict(size=8, color='red')
+                font=dict(size=10, color='red', family='Arial Black'),
+                bgcolor="white",
+                bordercolor="red",
+                borderwidth=1
             )
+
+    # ADD命令時のレジスタ間8の矢印
+    if st.session_state.cpu_state['ir'].startswith('ADD'):
+        # レジスタAとBからの加算矢印
+        fig.add_annotation(
+            x=0.8, y=0.45,  # レジスタBの下
+            ax=0.725, ay=0.45,  # レジスタAへ
+            arrowhead=3,
+            arrowsize=1.5,
+            arrowwidth=3,
+            arrowcolor="green",
+            text="加算",
+            font=dict(size=10, color='green', family='Arial Black'),
+            bgcolor="white",
+            bordercolor="green",
+            borderwidth=1
+        )
 
     # 書き込み矢印（WRITE命令時）
     if st.session_state.cpu_state['ir'].startswith('WRITE'):
         fig.add_annotation(
             x=0.725, y=0.45,  # レジスタA
             ax=0.35, ay=0.05,  # 番地12
-            arrowhead=2,
-            arrowsize=1,
-            arrowwidth=2,
+            arrowhead=3,
+            arrowsize=1.5,
+            arrowwidth=3,
             arrowcolor="purple",
             text="結果書き込み",
-            font=dict(size=8, color='purple')
+            font=dict(size=10, color='purple', family='Arial Black'),
+            bgcolor="white",
+            bordercolor="purple",
+            borderwidth=1
         )
+
+    # プログラムカウンタの更新矢印（次の命令へ）
+    if st.session_state.cpu_state['current_step'] > 0 and not st.session_state.cpu_state['is_finished']:
+        next_pc = st.session_state.cpu_state['pc']
+        if next_pc < 5:
+            # PCから次の命令への点線矢印
+            next_y = memory_y_positions[next_pc] if next_pc < len(memory_y_positions) else 0.05
+            fig.add_annotation(
+                x=0.8, y=0.8,  # PCから
+                ax=0.35, ay=next_y,  # 次の命令へ
+                arrowhead=2,
+                arrowsize=1,
+                arrowwidth=2,
+                arrowcolor="gray",
+                opacity=0.7,
+                text="次の命令",
+                font=dict(size=9, color='gray'),
+                bgcolor="white",
+                bordercolor="gray",
+                borderwidth=1
+            )
 
     # タイトルとラベル
     fig.add_annotation(
         x=0.2, y=0.98,
         text="<b>🧠 主記憶装置</b>",
         showarrow=False,
-        font=dict(size=14, color='black'),
+        font=dict(size=16, color='black'),
         xref="paper", yref="paper"
     )
 
@@ -247,9 +299,33 @@ def create_unified_cpu_visualization():
         x=0.8, y=0.98,
         text="<b>🖥️ CPU</b>",
         showarrow=False,
-        font=dict(size=14, color='black'),
+        font=dict(size=16, color='black'),
         xref="paper", yref="paper"
     )
+
+    # 実行中の命令の説明
+    if st.session_state.cpu_state['ir']:
+        instruction_desc = ""
+        if st.session_state.cpu_state['ir'].startswith('READ'):
+            instruction_desc = "📀 メモリからデータ読み込み"
+        elif st.session_state.cpu_state['ir'].startswith('ADD'):
+            instruction_desc = "➕ レジスタの値を加算"
+        elif st.session_state.cpu_state['ir'].startswith('WRITE'):
+            instruction_desc = "💾 結果をメモリに書き込み"
+        elif st.session_state.cpu_state['ir'] == 'STOP':
+            instruction_desc = "⏹️ プログラム終了"
+
+        if instruction_desc:
+            fig.add_annotation(
+                x=0.5, y=0.35,
+                text=f"<b>{instruction_desc}</b>",
+                showarrow=False,
+                font=dict(size=13, color='darkblue'),
+                bgcolor="lightyellow",
+                bordercolor="darkblue",
+                borderwidth=2,
+                xref="paper", yref="paper"
+            )
 
     # 実行ステップ表示
     if st.session_state.cpu_state['current_step'] > 0:
@@ -257,7 +333,7 @@ def create_unified_cpu_visualization():
             x=0.5, y=0.02,
             text=f"<b>実行ステップ: {st.session_state.cpu_state['current_step']}</b>",
             showarrow=False,
-            font=dict(size=12, color='darkblue'),
+            font=dict(size=14, color='darkblue'),
             xref="paper", yref="paper"
         )
 
@@ -275,16 +351,33 @@ def create_unified_cpu_visualization():
 
     return fig
 
+def save_state():
+    """현재 상태를 이력에 저장"""
+    cpu = st.session_state.cpu_state
+    state_snapshot = {
+        'memory': cpu['memory'].copy(),
+        'pc': cpu['pc'],
+        'ir': cpu['ir'],
+        'registers': cpu['registers'].copy(),
+        'current_step': cpu['current_step'],
+        'execution_log': cpu['execution_log'].copy(),
+        'is_finished': cpu['is_finished']
+    }
+    cpu['state_history'].append(state_snapshot)
+
 def execute_instruction():
     cpu = st.session_state.cpu_state
-    
+
     if cpu['pc'] >= 5 or cpu['is_finished']:
         return
-    
+
+    # 現在 状態を 履歴に 保存
+    save_state()
+
     # 命令フェッチ
     instruction = cpu['memory'][cpu['pc']]
     cpu['ir'] = instruction
-    
+
     # 命令実行
     if instruction.startswith('READ'):
         parts = instruction.split()
@@ -292,29 +385,44 @@ def execute_instruction():
         addr = int(parts[2].strip('()'))
         cpu['registers'][reg] = cpu['memory'][addr]
         log_msg = f"READ命令: 番地{addr}からデータ{cpu['memory'][addr]}を読み出し、レジスタ{reg}に格納"
-        
+
     elif instruction.startswith('ADD'):
         result = cpu['registers']['A'] + cpu['registers']['B']
         cpu['registers']['A'] = result
         log_msg = f"ADD命令: レジスタA({cpu['registers']['A']-cpu['registers']['B']}) + レジスタB({cpu['registers']['B']}) = {result}"
-        
+
     elif instruction.startswith('WRITE'):
         parts = instruction.split()
         addr = int(parts[1].strip('(),'))
         reg = parts[2]
         cpu['memory'][addr] = cpu['registers'][reg]
         log_msg = f"WRITE命令: レジスタ{reg}の値{cpu['registers'][reg]}を番地{addr}に書き込み"
-        
+
     elif instruction == 'STOP':
         cpu['is_finished'] = True
         log_msg = "STOP命令: プログラム終了"
-    
+
     cpu['execution_log'].append(log_msg)
-    
+
     if not cpu['is_finished']:
         cpu['pc'] += 1
-    
+
     cpu['current_step'] += 1
+
+def step_backward():
+    """一ステップ 戻る"""
+    cpu = st.session_state.cpu_state
+
+    if len(cpu['state_history']) > 0:
+        # 最後 状態を 復元
+        previous_state = cpu['state_history'].pop()
+        cpu['memory'] = previous_state['memory']
+        cpu['pc'] = previous_state['pc']
+        cpu['ir'] = previous_state['ir']
+        cpu['registers'] = previous_state['registers']
+        cpu['current_step'] = previous_state['current_step']
+        cpu['execution_log'] = previous_state['execution_log']
+        cpu['is_finished'] = previous_state['is_finished']
 
 # メイン画面レイアウト
 st.markdown("---")
@@ -337,13 +445,17 @@ st.plotly_chart(create_unified_cpu_visualization(), use_container_width=True)
 
 # 実行制御ボタン
 st.markdown("---")
-col1, col2 = st.columns([1, 1])
+col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
-    if st.button("▶️ 1ステップ実行", disabled=st.session_state.cpu_state['is_finished']):
-        execute_instruction()
+    if st.button("◀️ 1ステップ戻る", disabled=len(st.session_state.cpu_state['state_history']) == 0):
+        step_backward()
 
 with col2:
+    if st.button("▶️ 1ステップ進む", disabled=st.session_state.cpu_state['is_finished']):
+        execute_instruction()
+
+with col3:
     if st.button("🔄 リセット"):
         reset_cpu()
 
