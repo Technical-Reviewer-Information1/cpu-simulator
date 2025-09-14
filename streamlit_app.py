@@ -196,88 +196,156 @@ def create_unified_cpu_visualization():
         yanchor="middle"
     )
 
-    # データフローの矢印を追加
+    # データフローの矢印をShapeとして追加（前面に表示）
     # メモリからCPUへの命令フェッチ矢印
     if st.session_state.cpu_state['pc'] <= 4:
         pc_y = memory_y_positions[st.session_state.cpu_state['pc']]
+        # 矢印をlineとして描画
+        fig.add_shape(
+            type="line",
+            x0=0.35, y0=pc_y,
+            x1=0.65, y1=0.7,
+            line=dict(color="blue", width=8),
+            layer="above"
+        )
+        # 矢印の先端
         fig.add_annotation(
-            x=0.35, y=pc_y,
-            ax=0.65, ay=0.7,
-            arrowhead=2,
-            arrowsize=3,
-            arrowwidth=8,
-            arrowcolor="blue",
+            x=0.65, y=0.7,
+            text="▶",
+            showarrow=False,
+            font=dict(size=20, color='blue'),
+            xref="paper", yref="paper"
+        )
+        # ラベル
+        fig.add_annotation(
+            x=0.5, y=pc_y + 0.05,
             text="命令フェッチ",
+            showarrow=False,
             font=dict(size=12, color='blue', family='Arial Black'),
-            textangle=0,
             bgcolor="lightblue",
             bordercolor="blue",
-            borderwidth=2
+            borderwidth=2,
+            xref="paper", yref="paper"
         )
 
     # データ読み込み矢印（READ命令時）
     if st.session_state.cpu_state['ir'].startswith('READ'):
         # 番地10または11からレジスタへの矢印
         if 'A' in st.session_state.cpu_state['ir']:
+            # 線を描画
+            fig.add_shape(
+                type="line",
+                x0=0.35, y0=0.25,
+                x1=0.65, y1=0.5,
+                line=dict(color="orange", width=8),
+                layer="above"
+            )
+            # 矢印の先端
             fig.add_annotation(
-                x=0.35, y=0.25,  # 番地10
-                ax=0.65, ay=0.5,  # レジスタA
-                arrowhead=2,
-                arrowsize=3,
-                arrowwidth=8,
-                arrowcolor="orange",
+                x=0.65, y=0.5,
+                text="▶",
+                showarrow=False,
+                font=dict(size=20, color='orange'),
+                xref="paper", yref="paper"
+            )
+            # ラベル
+            fig.add_annotation(
+                x=0.5, y=0.37,
                 text="データ読み込み",
+                showarrow=False,
                 font=dict(size=11, color='orange', family='Arial Black'),
                 bgcolor="lightyellow",
                 bordercolor="orange",
-                borderwidth=2
+                borderwidth=2,
+                xref="paper", yref="paper"
             )
         elif 'B' in st.session_state.cpu_state['ir']:
+            # 線を描画
+            fig.add_shape(
+                type="line",
+                x0=0.35, y0=0.15,
+                x1=0.8, y1=0.5,
+                line=dict(color="red", width=8),
+                layer="above"
+            )
+            # 矢印の先端
             fig.add_annotation(
-                x=0.35, y=0.15,  # 番地11
-                ax=0.8, ay=0.5,   # レジスタB
-                arrowhead=2,
-                arrowsize=3,
-                arrowwidth=8,
-                arrowcolor="red",
+                x=0.8, y=0.5,
+                text="▶",
+                showarrow=False,
+                font=dict(size=20, color='red'),
+                xref="paper", yref="paper"
+            )
+            # ラベル
+            fig.add_annotation(
+                x=0.57, y=0.32,
                 text="データ読み込み",
+                showarrow=False,
                 font=dict(size=11, color='red', family='Arial Black'),
                 bgcolor="lightpink",
                 bordercolor="red",
-                borderwidth=2
+                borderwidth=2,
+                xref="paper", yref="paper"
             )
 
-    # ADD命令時のレジスタ間8の矢印
+    # ADD命令時のレジスタ間の矢印
     if st.session_state.cpu_state['ir'].startswith('ADD'):
         # レジスタAとBからの加算矢印
+        fig.add_shape(
+            type="line",
+            x0=0.8, y0=0.45,
+            x1=0.725, y1=0.45,
+            line=dict(color="green", width=8),
+            layer="above"
+        )
+        # 矢印の先端
         fig.add_annotation(
-            x=0.8, y=0.45,  # レジスタBの下
-            ax=0.725, ay=0.45,  # レジスタAへ
-            arrowhead=2,
-            arrowsize=3,
-            arrowwidth=8,
-            arrowcolor="green",
+            x=0.725, y=0.45,
+            text="▶",
+            showarrow=False,
+            font=dict(size=20, color='green'),
+            xref="paper", yref="paper"
+        )
+        # ラベル
+        fig.add_annotation(
+            x=0.76, y=0.4,
             text="加算",
+            showarrow=False,
             font=dict(size=11, color='green', family='Arial Black'),
             bgcolor="lightgreen",
             bordercolor="green",
-            borderwidth=2
+            borderwidth=2,
+            xref="paper", yref="paper"
         )
 
     # 書き込み矢印（WRITE命令時）
     if st.session_state.cpu_state['ir'].startswith('WRITE'):
+        # 線を描画
+        fig.add_shape(
+            type="line",
+            x0=0.725, y0=0.45,
+            x1=0.35, y1=0.05,
+            line=dict(color="purple", width=8),
+            layer="above"
+        )
+        # 矢印の先端
         fig.add_annotation(
-            x=0.725, y=0.45,  # レジスタA
-            ax=0.35, ay=0.05,  # 番地12
-            arrowhead=2,
-            arrowsize=3,
-            arrowwidth=8,
-            arrowcolor="purple",
+            x=0.35, y=0.05,
+            text="▶",
+            showarrow=False,
+            font=dict(size=20, color='purple'),
+            xref="paper", yref="paper"
+        )
+        # ラベル
+        fig.add_annotation(
+            x=0.53, y=0.25,
             text="結果書き込み",
+            showarrow=False,
             font=dict(size=11, color='purple', family='Arial Black'),
             bgcolor="lavender",
             bordercolor="purple",
-            borderwidth=2
+            borderwidth=2,
+            xref="paper", yref="paper"
         )
 
     # プログラムカウンタの更新矢印（次の命令へ）
