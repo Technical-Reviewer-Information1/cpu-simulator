@@ -116,8 +116,9 @@ def create_unified_cpu_visualization():
             x=0.2, y=y_pos,
             text=f"<b>{addr}</b>: {content} ({content_type})",
             showarrow=False,
-            font=dict(size=12, color='black'),
-            xref="paper", yref="paper"
+            font=dict(size=14, color='black'),
+            xref="paper", yref="paper",
+            align="center"
         )
 
     # CPUレジスタの描画（右側）
@@ -132,8 +133,9 @@ def create_unified_cpu_visualization():
         x=0.8, y=0.85,
         text=f"<b>PC: {st.session_state.cpu_state['pc']}</b>",
         showarrow=False,
-        font=dict(size=14, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=16, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     # 命令レジスタ
@@ -147,8 +149,9 @@ def create_unified_cpu_visualization():
         x=0.8, y=0.7,
         text=f"<b>IR:</b> {st.session_state.cpu_state['ir']}",
         showarrow=False,
-        font=dict(size=12, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=14, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     # データレジスタA
@@ -162,8 +165,9 @@ def create_unified_cpu_visualization():
         x=0.725, y=0.5,
         text=f"<b>A: {st.session_state.cpu_state['registers']['A']}</b>",
         showarrow=False,
-        font=dict(size=13, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=15, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     # データレジスタB
@@ -177,8 +181,9 @@ def create_unified_cpu_visualization():
         x=0.875, y=0.5,
         text=f"<b>B: {st.session_state.cpu_state['registers']['B']}</b>",
         showarrow=False,
-        font=dict(size=13, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=15, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     # データフローの矢印を追加
@@ -193,7 +198,7 @@ def create_unified_cpu_visualization():
             arrowwidth=3,
             arrowcolor="blue",
             text="命令フェッチ",
-            font=dict(size=11, color='blue', family='Arial Black'),
+            font=dict(size=12, color='blue', family='Arial Black'),
             textangle=0,
             bgcolor="white",
             bordercolor="blue",
@@ -212,7 +217,7 @@ def create_unified_cpu_visualization():
                 arrowwidth=3,
                 arrowcolor="orange",
                 text="データ読み込み",
-                font=dict(size=10, color='orange', family='Arial Black'),
+                font=dict(size=11, color='orange', family='Arial Black'),
                 bgcolor="white",
                 bordercolor="orange",
                 borderwidth=1
@@ -226,7 +231,7 @@ def create_unified_cpu_visualization():
                 arrowwidth=3,
                 arrowcolor="red",
                 text="データ読み込み",
-                font=dict(size=10, color='red', family='Arial Black'),
+                font=dict(size=11, color='red', family='Arial Black'),
                 bgcolor="white",
                 bordercolor="red",
                 borderwidth=1
@@ -243,7 +248,7 @@ def create_unified_cpu_visualization():
             arrowwidth=3,
             arrowcolor="green",
             text="加算",
-            font=dict(size=10, color='green', family='Arial Black'),
+            font=dict(size=11, color='green', family='Arial Black'),
             bgcolor="white",
             bordercolor="green",
             borderwidth=1
@@ -259,7 +264,7 @@ def create_unified_cpu_visualization():
             arrowwidth=3,
             arrowcolor="purple",
             text="結果書き込み",
-            font=dict(size=10, color='purple', family='Arial Black'),
+            font=dict(size=11, color='purple', family='Arial Black'),
             bgcolor="white",
             bordercolor="purple",
             borderwidth=1
@@ -280,7 +285,7 @@ def create_unified_cpu_visualization():
                 arrowcolor="gray",
                 opacity=0.7,
                 text="次の命令",
-                font=dict(size=9, color='gray'),
+                font=dict(size=10, color='gray'),
                 bgcolor="white",
                 bordercolor="gray",
                 borderwidth=1
@@ -291,16 +296,18 @@ def create_unified_cpu_visualization():
         x=0.2, y=0.98,
         text="<b>🧠 主記憶装置</b>",
         showarrow=False,
-        font=dict(size=16, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=18, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     fig.add_annotation(
         x=0.8, y=0.98,
         text="<b>🖥️ CPU</b>",
         showarrow=False,
-        font=dict(size=16, color='black'),
-        xref="paper", yref="paper"
+        font=dict(size=18, color='black'),
+        xref="paper", yref="paper",
+        align="center"
     )
 
     # 実行中の命令の説明
@@ -320,11 +327,12 @@ def create_unified_cpu_visualization():
                 x=0.5, y=0.35,
                 text=f"<b>{instruction_desc}</b>",
                 showarrow=False,
-                font=dict(size=13, color='darkblue'),
+                font=dict(size=15, color='darkblue'),
                 bgcolor="lightyellow",
                 bordercolor="darkblue",
                 borderwidth=2,
-                xref="paper", yref="paper"
+                xref="paper", yref="paper",
+                align="center"
             )
 
     # 実行ステップ表示
@@ -333,8 +341,9 @@ def create_unified_cpu_visualization():
             x=0.5, y=0.02,
             text=f"<b>実行ステップ: {st.session_state.cpu_state['current_step']}</b>",
             showarrow=False,
-            font=dict(size=14, color='darkblue'),
-            xref="paper", yref="paper"
+            font=dict(size=16, color='darkblue'),
+            xref="paper", yref="paper",
+            align="center"
         )
 
     fig.update_layout(
