@@ -205,7 +205,7 @@ def create_unified_cpu_visualization():
             type="line",
             x0=0.35, y0=pc_y,
             x1=0.65, y1=0.7,
-            line=dict(color="blue", width=8),
+            line=dict(color="blue", width=4),
             layer="above"
         )
         # 矢印の先端（線の終点に正確に配置）
@@ -238,7 +238,7 @@ def create_unified_cpu_visualization():
                 type="line",
                 x0=0.35, y0=0.25,
                 x1=0.65, y1=0.5,
-                line=dict(color="orange", width=8),
+                line=dict(color="orange", width=4),
                 layer="above"
             )
             # 矢印の先端
@@ -267,7 +267,7 @@ def create_unified_cpu_visualization():
                 type="line",
                 x0=0.35, y0=0.15,
                 x1=0.8, y1=0.5,
-                line=dict(color="red", width=8),
+                line=dict(color="red", width=4),
                 layer="above"
             )
             # 矢印の先端
@@ -298,7 +298,7 @@ def create_unified_cpu_visualization():
             type="line",
             x0=0.8, y0=0.45,
             x1=0.725, y1=0.45,
-            line=dict(color="green", width=8),
+            line=dict(color="green", width=4),
             layer="above"
         )
         # 矢印の先端
@@ -329,7 +329,7 @@ def create_unified_cpu_visualization():
             type="line",
             x0=0.725, y0=0.45,
             x1=0.35, y1=0.05,
-            line=dict(color="purple", width=8),
+            line=dict(color="purple", width=4),
             layer="above"
         )
         # 矢印の先端
