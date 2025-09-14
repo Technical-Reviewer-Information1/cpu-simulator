@@ -208,10 +208,10 @@ def create_unified_cpu_visualization():
             line=dict(color="blue", width=8),
             layer="above"
         )
-        # 矢印の先端
+        # 矢印の先端（線の方向に合わせて回転）
         fig.add_annotation(
             x=0.65, y=0.7,
-            text="▶",
+            text="◀",  # 左向きの矢印
             showarrow=False,
             font=dict(size=20, color='blue'),
             xref="paper", yref="paper"
@@ -243,7 +243,7 @@ def create_unified_cpu_visualization():
             # 矢印の先端
             fig.add_annotation(
                 x=0.65, y=0.5,
-                text="▶",
+                text="◀",  # 左向きの矢印
                 showarrow=False,
                 font=dict(size=20, color='orange'),
                 xref="paper", yref="paper"
@@ -271,7 +271,7 @@ def create_unified_cpu_visualization():
             # 矢印の先端
             fig.add_annotation(
                 x=0.8, y=0.5,
-                text="▶",
+                text="◀",  # 左向きの矢印
                 showarrow=False,
                 font=dict(size=20, color='red'),
                 xref="paper", yref="paper"
@@ -301,7 +301,7 @@ def create_unified_cpu_visualization():
         # 矢印の先端
         fig.add_annotation(
             x=0.725, y=0.45,
-            text="▶",
+            text="◀",  # 左向きの矢印
             showarrow=False,
             font=dict(size=20, color='green'),
             xref="paper", yref="paper"
@@ -328,10 +328,10 @@ def create_unified_cpu_visualization():
             line=dict(color="purple", width=8),
             layer="above"
         )
-        # 矢印の先端
+        # 矢印の先端（下向きの矢印）
         fig.add_annotation(
             x=0.35, y=0.05,
-            text="▶",
+            text="▼",  # 下向きの矢印
             showarrow=False,
             font=dict(size=20, color='purple'),
             xref="paper", yref="paper"
