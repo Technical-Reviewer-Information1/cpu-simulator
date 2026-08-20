@@ -1,0 +1,45 @@
+.qhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px}
+.card-q{border:1px solid var(--rule); background:var(--paper); padding:18px; margin-bottom:14px}
+.q-scene{font-size:1rem; font-weight:700; line-height:1.9}
+.choice4{display:grid; gap:8px; grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.choice4 .btn{text-align:left; line-height:1.65; padding:11px 13px}
+.choice4 .btn.correct{background:var(--ok-bg); border-color:var(--ok); color:var(--ok)}
+.choice4 .btn.wrong{background:var(--ng-bg); border-color:var(--ng); color:var(--ng)}
+.choice4.locked{pointer-events:none}
+.sel{width:100%; font-family:inherit; font-size:.95rem; padding:9px 11px; min-height:42px;
+  border:1px solid var(--ink-3); border-radius:2px; background:var(--paper); color:var(--ink)}
+input[type=range]{width:100%; accent-color:var(--accent); height:34px}
+.why{font-size:.85rem; color:var(--ink-2); line-height:1.85}
+.eqbox{font-family:var(--mono); font-size:1.02rem; font-weight:700; text-align:center; padding:14px;
+  border:1px solid var(--rule); background:var(--paper-2); line-height:1.8}
+.blankin{border:1.5px solid var(--accent); background:#fff; padding:6px 8px; text-align:center;
+  font-family:var(--mono); min-height:38px; font-size:.95rem; max-width:120px}
+.blankin.ok{border-color:var(--ok); background:var(--ok-bg)}
+.blankin.ng{border-color:var(--ng); background:var(--ng-bg)}
+table.tbl td .blankin{width:100%; max-width:none}
+
+/* --- 6-2 CPUの仕組み --- */
+.machine{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;align-items:start}
+.regbox{border:1px solid var(--line);border-radius:3px;padding:12px}
+.regbox h4{margin:0 0 10px;font-size:.84rem;color:var(--muted)}
+.reg{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);
+  border-radius:2px;padding:8px 10px;margin-bottom:7px;background:#fff}
+.reg .nm{font-size:.86rem}
+.reg .v{font:700 1.15rem/1 var(--mono)}
+.reg.hit{border-color:#c0392b;background:var(--ng-bg)}
+.reg.hit .v{color:#c0392b}
+table.mem{width:100%;border-collapse:collapse;font-size:.88rem}
+table.mem th,table.mem td{border:1px solid var(--line);padding:6px 8px}
+table.mem th{background:var(--paper-2);font-size:.76rem;color:var(--muted);font-weight:700}
+table.mem td.ad{width:3.4em;text-align:center;font-family:var(--mono);color:var(--muted)}
+table.mem tr.cur td{background:#fffbe8}
+table.mem tr.cur td.ad{background:#123a6b;color:#fff;font-weight:700}
+table.mem tr.wrote td{background:var(--ok-bg)}
+table.mem td.mono{font-family:var(--mono)}
+.phase{display:flex;gap:6px;margin:10px 0}
+.phase .p{flex:1;border:1px solid var(--line);border-radius:2px;padding:7px 4px;text-align:center;font-size:.82rem;color:var(--muted);background:#fff}
+.phase .p.on{background:#123a6b;color:#fff;border-color:#123a6b;font-weight:700}
+.trace th, .trace td{text-align:center !important}
+.trace td.mono{font-family:var(--mono)}
+.progedit select{font-size:.86rem;padding:4px 6px;min-height:34px;width:100%}
+.progedit input{font-size:.86rem;padding:4px 6px;width:4.2em;text-align:center}

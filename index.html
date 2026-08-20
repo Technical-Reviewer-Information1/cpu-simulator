@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPUにおける計算の仕組み｜情報Ⅰ共通テスト対策問題集</title>
+<meta name="description" content="本文の仮想コンピュータAをそのまま動かせます。1命令ずつ実行して、プログラムカウンタとレジスタの値の変化を追いましょう。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%2315181c%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2218%22 font-family=%22monospace%22 fill=%22%23fff%22 text-anchor=%22middle%22%3E01%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="inner">
+    <span class="eyebrow">第 6 章　コンピュータ　6-2</span>
+    <h1>CPUにおける計算の仕組み（pp.180-181）</h1>
+    <p class="lead">本文の仮想コンピュータAをそのまま動かせます。1命令ずつ実行して、プログラムカウンタとレジスタの値の変化を追いましょう。</p>
+    <p class="credit">Created by Dit-Lab.(Daiki ITO)　/　Supported by Tomoaki ATSUMI</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="step" id="step1">
+    <h2><span class="no">STEP 1</span>CPUと主記憶装置のしくみ</h2>
+    <p class="desc">CPUは主記憶装置にある命令を <strong>取得 → 解読 → 実行</strong> の順で処理します。まず登場するものを確認しましょう。</p>
+    <div class="panel">
+      <div class="tbl-scroll"><table class="tbl" id="partsTable"></table></div>
+      <hr class="sep">
+      <p class="qhead">仮想コンピュータAの命令一覧</p>
+      <div class="tbl-scroll"><table class="tbl" id="isaTable"></table></div>
+    </div>
+  </section>
+
+  <section class="step" id="step2">
+    <h2><span class="no">STEP 2</span>1命令ずつ実行する</h2>
+    <p class="desc">本文の表2と同じプログラムが入っています。ボタンを押して、値の変化を追いましょう。</p>
+    <div class="panel">
+      <div class="btn-row">
+        <button class="btn" id="runStep">1命令すすめる ▶</button>
+        <button class="btn" id="runAll">最後まで実行</button>
+        <button class="btn" id="runReset">最初から</button>
+      </div>
+      <div class="phase" id="phaseBox">
+        <div class="p" data-p="0">① 取得（フェッチ）</div>
+        <div class="p" data-p="1">② 解読（デコード）</div>
+        <div class="p" data-p="2">③ 実行</div>
+      </div>
+      <div class="machine" style="margin-top:12px">
+        <div class="regbox">
+          <h4>CPU</h4>
+          <div class="reg" id="regPC"><span class="nm">プログラムカウンタ</span><span class="v">1</span></div>
+          <div class="reg" id="regA"><span class="nm">レジスタA</span><span class="v">0</span></div>
+          <div class="reg" id="regB"><span class="nm">レジスタB</span><span class="v">0</span></div>
+          <div class="note info" id="curInst" style="margin-top:10px">「1命令すすめる」を押してください。</div>
+        </div>
+        <div class="regbox">
+          <h4>主記憶装置</h4>
+          <div class="tbl-scroll"><table class="mem" id="memTable"></table></div>
+        </div>
+      </div>
+      <p class="qhead" style="margin-top:16px">実行のようす（本文の表3にあたります）</p>
+      <div class="tbl-scroll"><table class="tbl trace" id="traceTable"></table></div>
+      <div class="note" id="runNote" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section class="step" id="step3">
+    <h2><span class="no">STEP 3</span>プログラムを書き替えて動かす</h2>
+    <p class="desc">命令やデータを自分で変えて実行できます。<strong>1〜9番地が命令、10番地以降がデータ</strong>です。</p>
+    <div class="panel">
+      <div class="btn-row" style="flex-wrap:wrap">
+        <button class="btn" id="preBook">本文のプログラム</button>
+        <button class="btn" id="preSwap">10番地と11番地を入れかえる</button>
+        <button class="btn" id="preSum3">3つのデータの和を求める</button>
+      </div>
+      <div class="tbl-scroll" style="margin-top:12px"><table class="mem progedit" id="editTable"></table></div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn" id="applyProg">このプログラムを入れて最初から</button>
+      </div>
+      <div class="note info" id="editNote" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section class="step" id="step4">
+    <h2><span class="no">STEP 4</span>本文の空欄【ア】〜【エ】を確かめる</h2>
+    <div class="panel" id="blankBox"></div>
+    <div class="note" id="blankNote" style="margin-top:10px"></div>
+  </section>
+
+  <section class="step" id="glossary">
+    <h2><span class="no">用語</span>この節で出てくることば</h2>
+    <div class="panel"><div id="glossBox"></div></div>
+  </section>
+
+  <section class="step" id="wrap">
+    <h2><span class="no">まとめ</span>おさえておきたいこと</h2>
+    <div class="panel">
+      <ul class="bullets">
+        <li>CPUは<strong>演算機能と制御機能</strong>を担当し、内部にデータを一時的に記憶する<strong>レジスタ</strong>をもつ。</li>
+        <li>命令は「<strong>取得 → 解読 → 実行</strong>」の順に処理される。</li>
+        <li><strong>プログラムカウンタ</strong>は次に実行する命令が入っている番地を保存するレジスタ。1つの命令が終わると次の番地に更新される。</li>
+        <li>READ はデータを主記憶装置からレジスタへ、WRITE はレジスタから主記憶装置へ。<strong>向きを取り違えない</strong>こと。</li>
+        <li>READ B の命令ではレジスタAの値は<strong>変わらない</strong>。表を追うときの落とし穴。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2><span class="no">活用</span>授業・探究での使い方</h2>
+    <div class="use-note">
+      <h3>授業で</h3>
+      <ul>
+        <li>STEP 2 を1命令ずつ実行し、表3と同じ値になることを全員で確かめる。</li>
+        <li>「取得→解読→実行」の3つの段階を、画面の表示と対応づけて説明する。</li>
+        <li>STEP 3 で「11番地と12番地の和を10番地に書き込む」など、別の課題を出して書き替えさせる。</li>
+      </ul>
+      <h3 style="margin-top:12px">探究で</h3>
+      <ul>
+        <li>同じ計算をより少ない命令数でできないかを考える。</li>
+        <li>この命令セットでできないこと（くり返しや条件分岐）を挙げ、何の命令が足りないかを考える。</li>
+        <li>実際のCPUの命令セット（x86やARM）にどんな命令があるかを調べる。</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  情報Ⅰ 共通テスト対策問題集（技術評論社）連動Webアプリ　/　Created by Dit-Lab.(Daiki ITO)　/　Supported by Tomoaki ATSUMI
+</footer>
+
+<script src="js/tools.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/terms.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
