@@ -156,6 +156,104 @@
     }));
   }
 
+
+  /* ---------- 挑戦：お題どおりに動くプログラムをつくる ---------- */
+  const TASKS = [
+    { id: 'sum', title: '10番地と11番地の和を、12番地に書く',
+      data: { 10: 6, 11: 7, 12: null },
+      want: { 12: 13 },
+      hint: 'READ A, (10) → READ B, (11) → ADD A, B → WRITE (12), A → STOP。本文と同じ形です。' },
+    { id: 'sub', title: '10番地から11番地を引いた答えを、12番地に書く',
+      data: { 10: 9, 11: 4, 12: null },
+      want: { 12: 5 },
+      hint: 'ADD を SUB に替えます。<strong>引く順番</strong>に注意——SUB は「A − B」です。どちらをAに読むかで答えが変わります。' },
+    { id: 'copy', title: '10番地の値を、そのまま12番地にうつす',
+      data: { 10: 8, 11: 3, 12: null },
+      want: { 12: 8 },
+      hint: '計算しなくてよいので、READ A, (10) → WRITE (12), A → STOP の3命令でできます。' },
+    { id: 'three', title: '10・11・12番地の3つの和を、9番地に書く',
+      data: { 9: null, 10: 4, 11: 5, 12: 6 },
+      want: { 9: 15 },
+      hint: '2つ足したあと、<strong>合計はレジスタAに残っています</strong>。3つ目を READ B して、もう一度 ADD します。' },
+    { id: 'double', title: '10番地の値を2倍して、12番地に書く',
+      data: { 10: 7, 11: 0, 12: null },
+      want: { 12: 14 },
+      hint: '同じ値をAとBの両方に読み込めば、ADD で2倍になります。11番地は使いません。' }
+  ];
+  let taskI = 0;
+
+  /** 採点用に、いまの命令だけを使ってお題のデータで実行する（画面の状態は変えない） */
+  function runHeadless(progSrc, dataSrc) {
+    const m = {}, pr = {};
+    for (let i = 1; i <= NADDR; i++) { m[i] = null; pr[i] = null; }
+    Object.keys(progSrc).forEach(function (k) { if (progSrc[k]) pr[+k] = progSrc[k].slice(); });
+    Object.keys(dataSrc).forEach(function (k) { m[+k] = dataSrc[k]; });
+    let pc = 1, a = 0, b = 0, steps = 0;
+    while (steps++ < 200) {
+      const p = pr[pc];
+      if (!p || p[0] === 'NONE') return { mem: m, end: 'noinst', pc: pc, steps: steps };
+      const id = p[0], x = p[1];
+      if (id === 'READA') a = m[x] === null ? 0 : m[x];
+      else if (id === 'READB') b = m[x] === null ? 0 : m[x];
+      else if (id === 'WRITEA') m[x] = a;
+      else if (id === 'ADD') a = a + b;
+      else if (id === 'SUB') a = a - b;
+      else if (id === 'STOP') return { mem: m, end: 'stop', steps: steps };
+      pc++;
+    }
+    return { mem: m, end: 'toolong', steps: steps };
+  }
+
+  function drawTask() {
+    const t = TASKS[taskI];
+    $('taskSel').innerHTML = TASKS.map(function (x, i) {
+      return '<option value="' + i + '"' + (i === taskI ? ' selected' : '') + '>' + x.title + '</option>';
+    }).join('');
+    $('taskDesc').className = 'note info';
+    $('taskDesc').innerHTML = '<strong>お題：' + t.title + '</strong><br>' +
+      '採点のときは、データを下の値に入れ替えてから実行します。';
+    const keys = Object.keys(t.data).map(Number).sort(function (a, b) { return a - b; });
+    $('taskTable').innerHTML = '<thead><tr><th>番地</th>' + keys.map(function (k) { return '<th>' + k + '</th>'; }).join('') +
+      '</tr></thead><tbody><tr><th>採点時のデータ</th>' +
+      keys.map(function (k) { return '<td class="mono">' + (t.data[k] === null ? '（空）' : t.data[k]) + '</td>'; }).join('') +
+      '</tr><tr><th>期待する結果</th>' +
+      keys.map(function (k) { return '<td class="mono">' + (t.want[k] !== undefined ? '<strong>' + t.want[k] + '</strong>' : '—') + '</td>'; }).join('') +
+      '</tr></tbody>';
+    $('taskFb').hidden = true;
+  }
+
+  function gradeTask() {
+    const t = TASKS[taskI];
+    const r = runHeadless(prog, t.data);
+    const fb = $('taskFb'); fb.hidden = false;
+    if (r.end === 'noinst') {
+      fb.className = 'note ng';
+      fb.innerHTML = '<strong>' + r.pc + '番地に命令がないところで止まりました。</strong>' +
+        '最後は <span class="mono">STOP</span> を置いて、命令のとちゅうに空きを作らないようにしましょう。';
+      return;
+    }
+    if (r.end === 'toolong') {
+      fb.className = 'note ng';
+      fb.innerHTML = '<strong>いつまでも終わりませんでした。</strong>STOP を置いてください。';
+      return;
+    }
+    const wrong = Object.keys(t.want).map(Number).filter(function (k) { return r.mem[k] !== t.want[k]; });
+    if (!wrong.length) {
+      fb.className = 'note ok';
+      fb.innerHTML = '<strong>正解です。</strong>' + r.steps + ' 命令で ' +
+        Object.keys(t.want).map(function (k) { return k + '番地 ＝ ' + t.want[k]; }).join('、') + ' になりました。<br>' +
+        '別のデータでも正しく動くのは、<strong>値ではなく番地を指定して</strong>命令を書いているからです。';
+      return;
+    }
+    fb.className = 'note ng';
+    fb.innerHTML = '<strong>まだお題どおりではありません。</strong><br>' +
+      wrong.map(function (k) {
+        return k + '番地は <span class="mono">' + (r.mem[k] === null ? '（空のまま）' : r.mem[k]) +
+          '</span>。期待しているのは <span class="mono">' + t.want[k] + '</span> です。';
+      }).join('<br>') +
+      '<br>STEP 3 の表で命令を直して、もう一度採点してください。';
+  }
+
   /* ---- STEP 4 ---- */
   const BLANKS = [
     { k: 'ア', q: 'コンピュータの【　】機能と制御機能はCPUが担っている。', ch: ['入力', '出力', '演算', '記憶', '処理'], a: '演算',
@@ -195,6 +293,16 @@
   }
 
   function init() {
+    if ($('taskSel')) {
+      drawTask();
+      $('taskSel').addEventListener('change', function () { taskI = +$('taskSel').value; drawTask(); });
+      $('taskRun').addEventListener('click', gradeTask);
+      $('taskHint').addEventListener('click', function () {
+        const fb = $('taskFb'); fb.hidden = false; fb.className = 'note info';
+        fb.innerHTML = '<strong>ヒント：</strong>' + TASKS[taskI].hint;
+      });
+    }
+
     load(BOOK);
     drawTables(); drawEdit(); drawBlanks();
     $('runStep').addEventListener('click', stepOnce);

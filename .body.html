@@ -59,6 +59,23 @@
     </div>
   </section>
 
+  <section class="step" id="stepTask">
+    <h2><span class="no">挑戦</span>お題どおりに動くプログラムをつくる</h2>
+    <p class="desc">STEP 3 の表で命令を組み立ててから、ここで<strong>採点</strong>できます。
+      データはこちらで用意した値に入れ替えて実行するので、まぐれ当たりになりません。</p>
+    <div class="panel">
+      <div class="btn-row" style="flex-wrap:wrap;align-items:flex-end">
+        <label class="fld" for="taskSel" style="margin:0">お題<br>
+          <select id="taskSel" class="sel" style="width:24em"></select></label>
+        <button class="btn primary" id="taskRun">採点する</button>
+        <button class="btn" id="taskHint">ヒント</button>
+      </div>
+      <div class="note info" id="taskDesc" style="margin-top:12px"></div>
+      <div class="tbl-scroll" style="margin-top:12px"><table class="tbl" id="taskTable"></table></div>
+      <div class="note" id="taskFb" hidden style="margin-top:12px"></div>
+    </div>
+  </section>
+
   <section class="step" id="step4">
     <h2><span class="no">STEP 4</span>本文の空欄【ア】〜【エ】を確かめる</h2>
     <div class="panel" id="blankBox"></div>

@@ -6,7 +6,7 @@
 <title>CPUにおける計算の仕組み｜情報Ⅰ共通テスト対策問題集</title>
 <meta name="description" content="本文の仮想コンピュータAをそのまま動かせます。1命令ずつ実行して、プログラムカウンタとレジスタの値の変化を追いましょう。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%2315181c%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2218%22 font-family=%22monospace%22 fill=%22%23fff%22 text-anchor=%22middle%22%3E01%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/style.css?v=1b60c856">
+<link rel="stylesheet" href="css/style.css?v=bdbb3cb0">
 <link rel="stylesheet" href="css/app.css?v=8c3cafe0">
 </head>
 <body>
@@ -82,6 +82,23 @@
     </div>
   </section>
 
+  <section class="step" id="stepTask">
+    <h2><span class="no">挑戦</span>お題どおりに動くプログラムをつくる</h2>
+    <p class="desc">STEP 3 の表で命令を組み立ててから、ここで<strong>採点</strong>できます。
+      データはこちらで用意した値に入れ替えて実行するので、まぐれ当たりになりません。</p>
+    <div class="panel">
+      <div class="btn-row" style="flex-wrap:wrap;align-items:flex-end">
+        <label class="fld" for="taskSel" style="margin:0">お題<br>
+          <select id="taskSel" class="sel" style="width:24em"></select></label>
+        <button class="btn primary" id="taskRun">採点する</button>
+        <button class="btn" id="taskHint">ヒント</button>
+      </div>
+      <div class="note info" id="taskDesc" style="margin-top:12px"></div>
+      <div class="tbl-scroll" style="margin-top:12px"><table class="tbl" id="taskTable"></table></div>
+      <div class="note" id="taskFb" hidden style="margin-top:12px"></div>
+    </div>
+  </section>
+
   <section class="step" id="step4">
     <h2><span class="no">STEP 4</span>本文の空欄【ア】〜【エ】を確かめる</h2>
     <div class="panel" id="blankBox"></div>
@@ -114,12 +131,14 @@
         <li>STEP 2 を1命令ずつ実行し、表3と同じ値になることを全員で確かめる。</li>
         <li>「取得→解読→実行」の3つの段階を、画面の表示と対応づけて説明する。</li>
         <li>STEP 3 で「11番地と12番地の和を10番地に書き込む」など、別の課題を出して書き替えさせる。</li>
+        <li>「挑戦」のお題を配り、STEP 3 で命令を組み立てさせてから採点させる。</li>
       </ul>
       <h3 style="margin-top:12px">探究で</h3>
       <ul>
         <li>同じ計算をより少ない命令数でできないかを考える。</li>
         <li>この命令セットでできないこと（くり返しや条件分岐）を挙げ、何の命令が足りないかを考える。</li>
         <li>実際のCPUの命令セット（x86やARM）にどんな命令があるかを調べる。</li>
+        <li>「10番地の値を2倍」など、命令が足りない中でどう工夫するかを考え、命令セットの設計について議論する。</li>
       </ul>
     </div>
   </section>
@@ -131,6 +150,6 @@
 </footer>
 
 <script src="js/terms.js?v=31ea8772"></script>
-<script src="js/app.js?v=6bd42a73"></script>
+<script src="js/app.js?v=0a68e9ec"></script>
 </body>
 </html>
