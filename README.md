@@ -1,6 +1,6 @@
 # CPUにおける計算の仕組み
 
-『大学入学共通テスト「情報Ⅰ」対策問題集』（技術評論社, ISBN 978-4-297-15084-6）pp.180-181 連動Webアプリ。
+『大学入学共通テスト「情報Ⅰ」対策問題集』（技術評論社, ISBN 978-4-297-15084-6）pp.178-180 連動Webアプリ。
 
 **公開URL**: https://technical-reviewer-information1.github.io/cpu-simulator/
 
