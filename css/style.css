@@ -10,7 +10,11 @@
   --ink:#15181c;
   --ink-2:#4a4f57;
   --ink-3:#858a92;
-  --rule:#d7d3cb;         /* 罫線 */
+  --rule:#d7d3cb;
+  /* 旧名のまま書かれているアプリ用の別名（未定義だと枠線や文字色が消えるため） */
+  --line: var(--rule);
+  --muted: var(--ink-2);
+  --sans: var(--font);         /* 罫線 */
   --rule-2:#e8e5df;
   --accent:#123a6b;       /* 濃紺。主要操作と現在地だけに使う */
   --accent-w:#e9eef6;
